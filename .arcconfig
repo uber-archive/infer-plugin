@@ -4,5 +4,5 @@
     "history.immutable": false,
     "unit.engine": "UberMultiTestEngine",
     "unit.engine.multi.engines": ["UberTestPlanTestEngine", "UberGradleTestEngine"],
-    "unit.engine.gradle.tasks": ["checkstyleAll"]
+    "unit.engine.gradle.tasks": [":infer-sample:checkstyleAll"]
 }
