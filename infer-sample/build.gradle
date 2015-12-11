@@ -5,8 +5,8 @@ apply plugin: 'guap'
 apply plugin: 'com.ubercab.crash'
 apply plugin: 'com.ubercab.compress'
 
-apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-module/2.3.0/shared-build-module-2.3.0.gradle")
-apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-app-test/2.3.0/shared-build-app-test-2.3.0.gradle")
+apply plugin: 'bootstrap-android-app'
+apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-module/3.0.0/shared-build-module-3.0.0.gradle")
 
 dependencies {
     compile 'com.ubercab:core:2.4.0'

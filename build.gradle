@@ -26,6 +26,7 @@ allprojects {
                     exclude group: "org.bouncycastle"
                 }
                 classpath "com.neenbedankt.gradle.plugins:android-apt:${pluginVersionAndroidApt}"
+                classpath "com.ubercab:bootstrap:7.2.0"
                 classpath "com.ubercab:crash-plugin:${pluginVersionCrash}"
                 classpath "com.ubercab:compress-plugin:${pluginVersionCompress}"
             }

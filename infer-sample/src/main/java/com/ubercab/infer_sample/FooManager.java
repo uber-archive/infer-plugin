@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  */
 public class FooManager {
 
-    private final @NonNull Foo foo;
+    @NonNull private final Foo foo;
 
     public FooManager(@NonNull Foo foo) {
         this.foo = foo;
