@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<lint>
+    <issue id="MissingTranslation" severity="warning"/>
+    <issue id="InvalidResourceFolder" severity="ignore" />
+    <issue id="InvalidPackage">
+        <ignore path="*okio*.jar"/>
+    </issue>
+</lint>
+

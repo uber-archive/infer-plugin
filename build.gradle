@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.kageiit:url-cache-plugin:1.0.0"
+    }
+}
+
+allprojects {
+    beforeEvaluate {
+        project.buildscript {
+            apply plugin: 'com.kageiit.url-cache'
+            apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-project/2.3.0/shared-build-project-2.3.0.gradle")
+
+            repositories {
+                mavenLocal()
+                maven { url mavenUrl }
+            }
+
+            dependencies {
+                classpath "com.android.tools.build:gradle:${pluginVersionAndroid}"
+                classpath "com.kageiit:jacobo-plugin:${pluginVersionJacobo}"
+                classpath "io.fabric.tools:gradle:${pluginVersionFabric}"
+                classpath("com.ubercab:guap:${pluginVersionGuap}") {
+                    exclude group: "org.bouncycastle"
+                }
+                classpath "com.neenbedankt.gradle.plugins:android-apt:${pluginVersionAndroidApt}"
+                classpath "com.ubercab:crash-plugin:${pluginVersionCrash}"
+                classpath "com.ubercab:compress-plugin:${pluginVersionCompress}"
+            }
+        }
+    }
+}

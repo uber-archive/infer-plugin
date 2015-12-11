@@ -1,0 +1,87 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.kageiit.url-cache'
+apply plugin: 'guap'
+apply plugin: 'com.ubercab.crash'
+apply plugin: 'com.ubercab.compress'
+
+apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-module/2.3.0/shared-build-module-2.3.0.gradle")
+apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-app-test/2.3.0/shared-build-app-test-2.3.0.gradle")
+
+dependencies {
+    compile 'com.ubercab:core:2.4.0'
+    compile 'com.ubercab:ui:1.3.1'
+    testCompile "com.ubercab.android:test:${androidTestLibraryVersion}"
+}
+
+def hasReleaseCredentials() {
+    return System.env.KEYSTORES_RELEASE_ANDROID_INFERPLUGIN != null
+}
+
+android {
+    compileSdkVersion 23
+
+    defaultConfig {
+        applicationId "com.ubercab.inferplugin"
+        minSdkVersion 15
+        targetSdkVersion 22
+
+        buildConfigField "String", "APP_NAME", "\"inferplugin\""
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('config/signing/debug.keystore')
+        }
+        release {
+            if (hasReleaseCredentials()) {
+                storeFile file(System.env.KEYSTORES_RELEASE_ANDROID_INFERPLUGIN)
+                keyAlias = System.env.KEY_ALIAS
+                keyPassword = System.env.KEY_PASSWORD
+                storePassword = System.env.STORE_PASSWORD
+            }
+        }
+    }
+    lintOptions {
+        abortOnError true
+        lintConfig file("config/lint/lint.xml")
+        error 'ExtraText'
+        warning 'AppCompatResource'
+    }
+    buildTypes {
+        release {
+            release {
+                buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+                if (hasReleaseCredentials()) {
+                    signingConfig signingConfigs.release
+                }
+                if (runProguard()) {
+                    minifyEnabled false
+                }
+            }
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+if (hasReleaseCredentials()) {
+    def compressVariants = ['release']
+    def cache = getProp(project, 'JOB_NAME', 'default')
+
+    compress {
+        imageoptim {
+            variantNames = compressVariants
+            cacheDirName = cache
+            imageOptimPath = "/usr/local/share/imageoptim/Contents/MacOS/ImageOptim"
+        }
+        pngcrush {
+            variantNames = compressVariants
+            cacheDirName = cache
+        }
+        apk {
+            variantNames = compressVariants
+        }
+    }
+}
