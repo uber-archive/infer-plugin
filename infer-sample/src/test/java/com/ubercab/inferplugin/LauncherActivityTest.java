@@ -1,4 +1,4 @@
-package com.ubercab.inferplugin;
+package com.ubercab.infer_sample;
 
 import com.ubercab.android.test.UberRobolectricBase;
 

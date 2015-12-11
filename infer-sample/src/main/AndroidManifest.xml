@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.ubercab.inferplugin"
+    package="com.ubercab.infer_sample"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name="InferPluginApplication"
+        android:name="com.ubercab.infer_sample.InferPluginApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Uber.Black">
         <activity
-            android:name=".LauncherActivity"
+            android:name="com.ubercab.infer_sample.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
