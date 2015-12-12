@@ -1,4 +1,4 @@
-package com.ubercab.infer_sample;
+package com.ubercab.infer_sample.failing;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.ubercab.infer_sample.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
