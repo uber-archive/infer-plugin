@@ -1,4 +1,4 @@
-package com.ubercab.infer_sample;
+package com.ubercab.infer_sample.failing;
 
 import android.content.Context;
 import android.os.Bundle;

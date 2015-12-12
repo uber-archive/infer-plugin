@@ -1,9 +1,12 @@
-package com.ubercab.infer_sample;
+package com.ubercab.infer_sample.failing;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.ubercab.infer_sample.Foo;
+import com.ubercab.infer_sample.FooManager;
+import com.ubercab.infer_sample.R;
 import com.ubercab.mvc.app.Controller;
 import com.ubercab.mvc.app.MvcActivity;
 

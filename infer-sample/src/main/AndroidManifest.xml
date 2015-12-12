@@ -4,13 +4,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name="com.ubercab.infer_sample.InferPluginApplication"
+        android:name=".InferPluginApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Uber.Black">
         <activity
-            android:name="com.ubercab.infer_sample.MainActivity"
+            android:name=".failing.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
