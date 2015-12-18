@@ -1,0 +1,13 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+apply plugin: 'com.kageiit.url-cache'
+apply from: urlCache.get("http://artifactory.uber.internal:4587/artifactory/mobile/com/ubercab/shared-build-module/2.3.0/shared-build-module-2.3.0.gradle")
+
+group = "com.ubercab"
+createVersionNumber()
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
