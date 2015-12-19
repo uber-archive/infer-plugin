@@ -1,13 +1,11 @@
 package com.ubercab.infer.util
-
-import static com.ubercab.infer.InferPlugin.TAG
-
 /**
  * Utility class to run command line commands.
  */
 final class RunCommandUtils {
 
-    private final static int SUCCESS = 0
+    private static final int SUCCESS = 0
+    private static final String TAG = "InferPlugin"
 
     private RunCommandUtils() { }
 
