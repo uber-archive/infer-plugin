@@ -9,7 +9,7 @@ import org.gradle.api.file.FileCollection
  */
 public final class JavacUtils {
 
-    private JavacUtils() {}
+    private JavacUtils() { }
 
     static String generateJavacArgument(FileCollection files, String fileDelimiter = ":", String argument = "") {
         StringBuilder argumentBuilder = new StringBuilder();
