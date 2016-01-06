@@ -4,16 +4,16 @@ import org.junit.Test
 
 class RunCommandUtilsTest {
 
-    @Test(expected = RunCommandUtils.CommandException)
-    public void run_whenCommandReturnsFailure_shouldFail() {
-        RunCommandUtils.run("ls RANDOM_DIRECTORY", true)
+    @Test
+    public void run_whenCommandReturnsFailure_shouldHaveFailureResult() {
+        assert RunCommandUtils.run("ls RANDOM_DIRECTORY").success == false
     }
 
     @Test
     public void run_whenCommandReturnsSuccess_shouldSucceed() {
-        def (String stdout, String stderr) = RunCommandUtils.run("ls", true)
+        def result = RunCommandUtils.run("ls")
 
-        assert stdout.length() > 0
-        assert stderr == ""
+        assert result.stdout.length() > 0
+        assert result.stderr == ""
     }
 }

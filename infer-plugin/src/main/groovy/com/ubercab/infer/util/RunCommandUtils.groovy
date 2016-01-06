@@ -1,4 +1,7 @@
 package com.ubercab.infer.util
+
+import org.codehaus.groovy.tools.shell.CommandException
+
 /**
  * Utility class to run command line commands.
  */
@@ -13,41 +16,42 @@ final class RunCommandUtils {
      * Method to run a command line command.
      *
      * @param command command string to be run.
-     * @param errorIfFail should throw exception or not upon failure.
      * @param dir directory to run the command from.
      * @return A list containing stdout and stderr strings.
      *
      * @throws CommandException if the command fails while running and if errorIfFail is true.
      */
-    static List<String> run(String command, boolean errorIfFail = true, File dir = new File("."))
-            throws CommandException {
+    static CommandResult run(String command, File dir = new File(".")) {
         String[] env = null
         Process process = command.execute(env, dir)
         StringBuffer stdoutBuffer = new StringBuffer(), stderrBuffer = new StringBuffer()
         process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
 
-        String stdout = stdoutBuffer.toString()
-        String stderr = stderrBuffer.toString()
-
         int exitCode = process.exitValue()
-        if (errorIfFail && exitCode != SUCCESS) {
-            throw new CommandException("Command exited with ${exitCode} - ${stderr}")
-        }
-        return [stdout, stderr]
+
+        CommandResult result = new CommandResult()
+        result.stdout = stdoutBuffer.toString()
+        result.stderr = stderrBuffer.toString()
+        result.success = exitCode == SUCCESS;
+        return result
     }
 
-    /**
-     * A wrapper class for exceptions caused while running command line commands
-     */
-    static class CommandException extends RuntimeException {
+    static class CommandResult {
 
-        /**
-         * CommandLine exception constructor.
-         *
-         * @param message the message to be thrown.
-         */
-        public CommandException(String message) {
-            super("${TAG} :${message}");
+        private String stderr;
+        private String stdout;
+        private boolean success;
+
+        String getStderr() {
+            return stderr
+        }
+
+        String getStdout() {
+            return stdout
+        }
+
+        boolean getSuccess() {
+            return success
         }
     }
 }
