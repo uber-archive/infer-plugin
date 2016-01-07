@@ -21,26 +21,39 @@ class InferPluginIntegrationTest {
 
     @Test
     void infer_withBadSource_shouldFailWhenInferFindsAWarning() {
-        setupTestWithFixture("failing_java_app")
-
-        def result = GradleRunner.create()
-                .withProjectDir(mProjectFile)
-                .withArguments('infer')
-                .buildAndFail()
-
-        assert result.task(":infer").outcome == TaskOutcome.FAILED
+        runCommand("infer", "failing_infer_java_app", false)
     }
 
     @Test
     void infer_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
-        setupTestWithFixture("passing_java_app")
+        runCommand("infer", "passing_infer_java_app", true)
+    }
 
-        def result = GradleRunner.create()
-                .withProjectDir(mProjectFile)
-                .withArguments('infer')
-                .build()
+    @Test
+    void eradicate_withBadSource_shouldFailWhenInferFindsAWarning() {
+        runCommand("eradicate", "failing_eradicate_java_app", false)
+    }
 
-        assert result.task(":infer").outcome == TaskOutcome.SUCCESS
+    @Test
+    void eradicate_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
+        runCommand("eradicate", "passing_eradicate_java_app", true)
+    }
+
+    private def runCommand(String command, String fixtureName, boolean shouldSucceed) {
+        setupTestWithFixture(fixtureName)
+
+        def runner = GradleRunner.create()
+            .withProjectDir(mProjectFile)
+            .withArguments(command)
+
+        def result
+        if (shouldSucceed) {
+            result = runner.build()
+            assert result.task(":${command}").outcome == TaskOutcome.SUCCESS
+        } else {
+            result = runner.buildAndFail()
+            assert result.task(":${command}").outcome == TaskOutcome.FAILED
+        }
     }
 
     private def setupTestWithFixture(String fixtureName) {
@@ -64,6 +77,14 @@ class InferPluginIntegrationTest {
 
                 apply plugin: 'java'
                 apply plugin: 'com.ubercab.infer'
+
+                repositories {
+                    jcenter()
+                }
+
+                dependencies {
+                    compile 'com.intellij:annotations:5.1'
+               }
             """
     }
 }

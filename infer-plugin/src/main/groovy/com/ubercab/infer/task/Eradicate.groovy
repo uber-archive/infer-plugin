@@ -1,9 +1,9 @@
 package com.ubercab.infer.task
 
-class Infer extends InferAnalyzeCommand {
+class Eradicate extends InferAnalyzeCommand {
 
     @Override
     protected String getAnalyzerName() {
-        return "infer"
+        return "eradicate"
     }
 }

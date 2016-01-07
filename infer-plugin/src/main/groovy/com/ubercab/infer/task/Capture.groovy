@@ -13,15 +13,11 @@ public abstract class Capture extends DefaultTask {
         def outputDir = new File(project.getBuildDir(), "infer-out")
         outputDir.mkdirs()
 
-        def javacCommand = "javac " + getJavacArguments()
-
-        println(javacCommand)
-
         def result = RunCommandUtils.run("infer -i -a capture --out ${outputDir.absolutePath}"
-                + " -- ${javacCommand}", project.projectDir)
+                + " -- javac ${getJavacArguments()}", project.projectDir)
 
         if (!result.success) {
-            throw new RuntimeException("Error capturing Infer data: " + result.stdout)
+            throw new RuntimeException("Error capturing Infer data: " + result.stderr)
         }
     }
 

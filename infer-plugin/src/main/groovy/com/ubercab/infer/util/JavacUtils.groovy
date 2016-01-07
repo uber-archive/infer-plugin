@@ -11,7 +11,7 @@ public final class JavacUtils {
 
     private JavacUtils() { }
 
-    static String generateJavacArgument(FileCollection files, String fileDelimiter = ":", String argument = "") {
+    static String generateJavacArgument(FileCollection files, String argument = "", String fileDelimiter = ":") {
         StringBuilder argumentBuilder = new StringBuilder();
 
         if (files.size() > 0) {
@@ -21,6 +21,7 @@ public final class JavacUtils {
                 argumentBuilder.append(it.absolutePath)
                 argumentBuilder.append(fileDelimiter)
             }
+            argumentBuilder.append(" ")
         }
 
         return argumentBuilder.toString()

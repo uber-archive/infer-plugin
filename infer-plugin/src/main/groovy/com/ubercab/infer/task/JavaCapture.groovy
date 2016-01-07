@@ -25,7 +25,7 @@ public class JavaCapture extends Capture {
         argumentsBuilder.append(JavacUtils.generateJavacArgument(project.configurations.getByName("compile"),
                 "-classpath"))
 
-        argumentsBuilder.append(JavacUtils.generateJavacArgument(project.sourceSets.main.java, " "))
+        argumentsBuilder.append(JavacUtils.generateJavacArgument(project.sourceSets.main.java, " ", " "))
 
         return argumentsBuilder.toString()
     }
