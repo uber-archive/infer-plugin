@@ -16,7 +16,7 @@ public class CheckForInfer extends DefaultTask {
         } catch (IOException e) {
             throw new GradleException(
                 "Infer is not installed on this machine.\n" +
-                "If you have Homebrew, you can easily install Infer with: brew install fb-infer\n" +
+                "If you have Homebrew, you can easily install Infer with: brew install infer\n" +
                 "For other installation options, see: http://fbinfer.com/docs/getting-started.html"
             )
         }
