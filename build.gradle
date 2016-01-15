@@ -7,7 +7,7 @@ allprojects {
             }
 
             dependencies {
-                classpath "com.ubercab:bootstrap:9.0.0"
+                classpath "com.ubercab:bootstrap:11.+"
             }
         }
     }
