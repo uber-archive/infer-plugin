@@ -16,8 +16,11 @@ class InferJavaPlugin implements Plugin<Project> {
     void apply(Project project) {
         def checkForInferTask = project.tasks.create(Constants.TASK_CHECK_FOR_INFER, CheckForInfer)
         def inferCaptureTask = project.tasks.create(Constants.TASK_CAPTURE, Capture) {
+            bootClasspath = {
+                null
+            }
             compileDependencies = {
-                return project.configurations.getByName("compile")
+                project.configurations.getByName("compile")
             }
             processorDependencies = {
                 project.configurations.getByName("apt")
@@ -27,6 +30,12 @@ class InferJavaPlugin implements Plugin<Project> {
             }
             sourceFiles = {
                 project.sourceSets.main.java
+            }
+            sourceJavaVersion = {
+                project.sourceCompatibility
+            }
+            targetJavaVersion = {
+                project.targetCompatibility
             }
         }
         inferCaptureTask.dependsOn(checkForInferTask)

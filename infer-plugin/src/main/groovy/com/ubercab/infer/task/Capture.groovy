@@ -13,10 +13,13 @@ import org.gradle.api.tasks.TaskAction
  */
 public class Capture extends DefaultTask {
 
+    @Input Closure<FileCollection> bootClasspath
     @Input Closure<FileCollection> compileDependencies
     @Input Closure<FileCollection> processorDependencies
     @Input Closure<FileCollection> providedDependencies
     @Input Closure<FileCollection> sourceFiles
+    @Input Closure<String> sourceJavaVersion
+    @Input Closure<String> targetJavaVersion
 
     @TaskAction
     def captureInferData() {
@@ -26,8 +29,8 @@ public class Capture extends DefaultTask {
         def javacOutputDirPath = temporaryDir.absolutePath
 
         def result = RunCommandUtils.run("infer -i -a capture --out ${outputDir.absolutePath}"
-                + " -- javac -d ${javacOutputDirPath} -s ${javacOutputDirPath} ${getJavacArguments()}",
-                project.projectDir)
+                + " -- javac -source ${sourceJavaVersion()} -target ${targetJavaVersion()} -d ${javacOutputDirPath} "
+                + "-s ${javacOutputDirPath} ${getJavacArguments()}", project.projectDir)
 
         if (!result.success) {
             throw new RuntimeException("Error capturing Infer data: " + result.stderr)
@@ -39,6 +42,13 @@ public class Capture extends DefaultTask {
      */
     private String getJavacArguments() {
         StringBuilder argumentsBuilder = new StringBuilder();
+
+        try {
+            def bootClasspath = bootClasspath()
+            if (bootClasspath != null) {
+                argumentsBuilder.append(JavacUtils.generateJavacArgument(bootClasspath, '-bootclasspath'))
+            }
+        } catch (UnknownConfigurationException ignored) {}
 
         try {
             argumentsBuilder.append(JavacUtils.generateJavacArgument(processorDependencies(), '-processorpath'))
