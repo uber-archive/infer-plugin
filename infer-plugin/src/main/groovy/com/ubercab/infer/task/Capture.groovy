@@ -1,12 +1,22 @@
 package com.ubercab.infer.task
+
+import com.ubercab.infer.util.JavacUtils
 import com.ubercab.infer.util.RunCommandUtils
 import org.gradle.api.DefaultTask
+import org.gradle.api.artifacts.UnknownConfigurationException
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+
 /**
- * Responsible for capturing Infer metadata for future analysis. Must be subclassed for specific platforms to provide
- * appropriate configuration.
+ * Responsible for capturing Infer metadata for future analysis.
  */
-public abstract class Capture extends DefaultTask {
+public class Capture extends DefaultTask {
+
+    @Input Closure<FileCollection> compileDependencies
+    @Input Closure<FileCollection> processorDependencies
+    @Input Closure<FileCollection> providedDependencies
+    @Input Closure<FileCollection> sourceFiles
 
     @TaskAction
     def captureInferData() {
@@ -27,5 +37,21 @@ public abstract class Capture extends DefaultTask {
     /**
      * @return Javac arguments to compile the project.
      */
-    abstract protected String getJavacArguments();
+    private String getJavacArguments() {
+        StringBuilder argumentsBuilder = new StringBuilder();
+
+        try {
+            argumentsBuilder.append(JavacUtils.generateJavacArgument(processorDependencies(), '-processorpath'))
+        } catch (UnknownConfigurationException ignored) {}
+
+        try {
+            argumentsBuilder.append(JavacUtils.generateJavacArgument(providedDependencies(), '-processorpath'))
+        } catch (UnknownConfigurationException ignored) { }
+
+        argumentsBuilder.append(JavacUtils.generateJavacArgument(compileDependencies(), "-classpath"))
+
+        argumentsBuilder.append(JavacUtils.generateJavacArgument(sourceFiles(), " ", " "))
+
+        return argumentsBuilder.toString()
+    }
 }
