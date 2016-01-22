@@ -1,11 +1,11 @@
 package com.ubercab.infer.util
 
 import org.junit.Before
-import org.junit.Test;
+import org.junit.Test
 
-class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
+class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
 
-    private String androidTestBuildFile
+    String androidTestBuildFile
 
     @Before
     void setup() {
@@ -24,7 +24,7 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                     }
                 }
 
-                apply plugin: 'com.android.application'
+                apply plugin: 'com.android.library'
                 apply plugin: 'com.neenbedankt.android-apt'
                 apply plugin: 'com.ubercab.infer.android'
 

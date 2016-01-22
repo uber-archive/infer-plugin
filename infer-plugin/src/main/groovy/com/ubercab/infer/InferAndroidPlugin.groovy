@@ -15,9 +15,17 @@ class InferAndroidPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        if (project.plugins.hasPlugin("com.android.application")) {
+            createInferTasks(project, project.android.applicationVariants)
+        } else if (project.plugins.hasPlugin("com.android.library")) {
+            createInferTasks(project, project.android.libraryVariants)
+        }
+    }
+
+    private createInferTasks(Project project, Set<BaseVariant> variants) {
         def checkForInferTask = project.tasks.create(Constants.TASK_CHECK_FOR_INFER, CheckForInfer)
 
-        project.android.applicationVariants.all { BaseVariant variant ->
+        variants.all { BaseVariant variant ->
             def taskVariantName = variant.baseName.capitalize()
 
             def inferCaptureTask = createCaptureTask(project, taskVariantName, variant)
@@ -44,7 +52,6 @@ class InferAndroidPlugin implements Plugin<Project> {
             } else {
                 inferTask.setDescription("Runs Infer static analysis.")
             }
-
         }
     }
 
