@@ -50,13 +50,19 @@ public class Capture extends DefaultTask {
             }
         } catch (UnknownConfigurationException ignored) {}
 
+        def processorDependenciesList = project.files();
+
         try {
-            argumentsBuilder.append(JavacUtils.generateJavacArgument(processorDependencies(), '-processorpath'))
+            processorDependenciesList += processorDependencies()
         } catch (UnknownConfigurationException ignored) {}
 
         try {
-            argumentsBuilder.append(JavacUtils.generateJavacArgument(providedDependencies(), '-processorpath'))
+            processorDependenciesList += providedDependencies()
         } catch (UnknownConfigurationException ignored) { }
+
+        if (!processorDependenciesList.isEmpty()) {
+            argumentsBuilder.append(JavacUtils.generateJavacArgument(processorDependenciesList, '-processorpath'))
+        }
 
         argumentsBuilder.append(JavacUtils.generateJavacArgument(compileDependencies() + providedDependencies(),
                 "-classpath"))
