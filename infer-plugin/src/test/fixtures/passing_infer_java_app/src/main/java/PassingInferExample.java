@@ -1,3 +1,5 @@
+import javax.annotation.Generated;
+
 class PassingInferExample {
 
     String mayReturnNull(int i) {

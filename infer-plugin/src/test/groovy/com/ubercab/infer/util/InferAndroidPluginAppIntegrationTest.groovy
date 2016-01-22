@@ -16,13 +16,16 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                         jcenter()
                         mavenLocal()
                     }
+
                     dependencies {
                         classpath 'com.android.tools.build:gradle:1.5.0'
+                        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
                         classpath files($pluginClasspath)
                     }
-               }
+                }
 
                 apply plugin: 'com.android.application'
+                apply plugin: 'com.neenbedankt.android-apt'
                 apply plugin: 'com.ubercab.infer.android'
 
                 repositories {
@@ -40,6 +43,9 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
 
                     dependencies {
                         compile 'com.intellij:annotations:5.1'
+
+                        // Annotations included to test provided support.
+                        provided 'javax.annotation:jsr250-api:1.0'
 
                         // Leak Canary included to test AAR support.
                         debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'

@@ -1,6 +1,7 @@
 import android.app.Activity;
 import com.squareup.leakcanary.LeakCanary;
 import org.jetbrains.annotations.Nullable;
+import javax.annotation.Generated;
 
 class TestActivity extends Activity {
 

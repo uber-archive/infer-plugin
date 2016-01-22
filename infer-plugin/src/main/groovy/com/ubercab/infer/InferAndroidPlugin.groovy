@@ -62,7 +62,8 @@ class InferAndroidPlugin implements Plugin<Project> {
                 project.configurations.getByName("apt")
             }
             providedDependencies = {
-                project.configurations.getByName("${variant.baseName}Provided")
+                project.configurations.getByName("provided") +
+                project.configurations.getByName ("${variant.baseName}Provided")
             }
             sourceFiles = {
                 variant.javaCompiler.source

@@ -17,11 +17,13 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
                         mavenLocal()
                     }
                     dependencies {
+                        classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.0.3'
                         classpath files($pluginClasspath)
                     }
-               }
+                }
 
                 apply plugin: 'java'
+                apply plugin: 'nebula.provided-base'
                 apply plugin: 'com.ubercab.infer.java'
 
                 repositories {
@@ -29,6 +31,9 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
                 }
 
                 dependencies {
+                    // Annotations included to test provided support.
+                    provided 'javax.annotation:jsr250-api:1.0'
+
                     compile 'com.intellij:annotations:5.1'
                }
             """

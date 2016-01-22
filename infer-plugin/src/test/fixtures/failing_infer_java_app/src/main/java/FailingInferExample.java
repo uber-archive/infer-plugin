@@ -1,3 +1,5 @@
+import javax.annotation.Generated;
+
 class FailingInferExample {
 
     String mayReturnNull(int i) {

@@ -1,4 +1,5 @@
 import org.jetbrains.annotations.Nullable;
+import javax.annotation.Generated;
 
 class PassingEradicateExample {
 

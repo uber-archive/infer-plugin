@@ -58,7 +58,8 @@ public class Capture extends DefaultTask {
             argumentsBuilder.append(JavacUtils.generateJavacArgument(providedDependencies(), '-processorpath'))
         } catch (UnknownConfigurationException ignored) { }
 
-        argumentsBuilder.append(JavacUtils.generateJavacArgument(compileDependencies(), "-classpath"))
+        argumentsBuilder.append(JavacUtils.generateJavacArgument(compileDependencies() + providedDependencies(),
+                "-classpath"))
 
         argumentsBuilder.append(JavacUtils.generateJavacArgument(sourceFiles(), " ", " "))
 

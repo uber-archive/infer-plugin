@@ -1,3 +1,4 @@
+import javax.annotation.Generated;
 
 class PassingEradicateExample {
 
