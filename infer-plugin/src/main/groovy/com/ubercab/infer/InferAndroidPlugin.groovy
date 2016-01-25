@@ -26,7 +26,7 @@ class InferAndroidPlugin implements Plugin<Project> {
         def checkForInferTask = project.tasks.create(Constants.TASK_CHECK_FOR_INFER, CheckForInfer)
 
         variants.all { BaseVariant variant ->
-            def taskVariantName = variant.baseName.capitalize()
+            def taskVariantName = variant.name.capitalize()
 
             def inferCaptureTask = createCaptureTask(project, taskVariantName, variant)
             inferCaptureTask.dependsOn(checkForInferTask)
@@ -62,7 +62,7 @@ class InferAndroidPlugin implements Plugin<Project> {
             }
             compileDependencies = {
                 project.configurations.getByName("compile") +
-                        project.configurations.getByName("${variant.baseName}Compile") +
+                        project.configurations.getByName("${variant.name}Compile") +
                         project.files(project.fileTree(dir: "${project.buildDir.path}/intermediates/exploded-aar", include: "**/*.jar").files)
             }
             processorDependencies = {
@@ -70,7 +70,7 @@ class InferAndroidPlugin implements Plugin<Project> {
             }
             providedDependencies = {
                 project.configurations.getByName("provided") +
-                project.configurations.getByName ("${variant.baseName}Provided")
+                project.configurations.getByName ("${variant.name}Provided")
             }
             sourceFiles = {
                 variant.javaCompiler.source

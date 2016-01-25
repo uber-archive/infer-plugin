@@ -1,11 +1,39 @@
 package com.ubercab.infer.util
 
 import org.junit.Before
-import org.junit.Test;
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
+@RunWith(Parameterized.class)
 class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
 
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        def commands = [
+                ["inferFlavorOneDebug", "passing_infer_android_project", true].toArray(),
+                ["inferFlavorOneRelease", "passing_infer_android_project", true].toArray(),
+                ["inferFlavorTwoDebug", "failing_infer_android_project", false].toArray(),
+                ["inferFlavorTwoRelease", "failing_infer_android_project", false].toArray(),
+                ["eradicateFlavorOneDebug", "passing_eradicate_android_project", true].toArray(),
+                ["eradicateFlavorOneRelease", "passing_eradicate_android_project", true].toArray(),
+                ["eradicateFlavorTwoDebug", "failing_eradicate_android_project", false].toArray(),
+                ["eradicateFlavorTwoRelease", "failing_eradicate_android_project", false].toArray(),
+        ]
+        return commands
+    }
+
     private String androidTestBuildFile
+    private String command
+    private String fixtureName
+    private boolean expectedResult
+
+    public InferAndroidPluginAppIntegrationTest(String command, String fixtureName, Boolean expectedResult) {
+        this.command = command
+        this.fixtureName = fixtureName
+        this.expectedResult = expectedResult
+
+    }
 
     @Before
     void setup() {
@@ -41,6 +69,11 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                         targetSdkVersion 23
                     }
 
+                    productFlavors {
+                        flavorOne
+                        flavorTwo
+                    }
+
                     dependencies {
                         compile 'com.intellij:annotations:5.1'
 
@@ -57,43 +90,8 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    void eradicateDebug_withBadSource_shouldFailWhenInferFindsAWarning() {
-        runCommand("eradicateDebug", "failing_eradicate_android_project", false)
-    }
-
-    @Test
-    void eradicateRelease_withBadSource_shouldFailWhenInferFindsAWarning() {
-        runCommand("eradicateRelease", "failing_eradicate_android_project", false)
-    }
-
-    @Test
-    void eradicateDebug_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
-        runCommand("eradicateDebug", "passing_eradicate_android_project", true)
-    }
-
-    @Test
-    void eradicateRelease_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
-        runCommand("eradicateRelease", "passing_eradicate_android_project", true)
-    }
-
-    @Test
-    void inferDebug_withBadSource_shouldFailWhenInferFindsAWarning() {
-        runCommand("inferDebug", "failing_infer_android_project", false)
-    }
-
-    @Test
-    void inferRelease_withBadSource_shouldFailWhenInferFindsAWarning() {
-        runCommand("inferRelease", "failing_infer_android_project", false)
-    }
-
-    @Test
-    void inferDebug_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
-        runCommand("inferDebug", "passing_infer_android_project", true)
-    }
-
-    @Test
-    void inferRelease_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
-        runCommand("inferRelease", "passing_infer_android_project", true)
+    public void command_shouldPassOrFailAsExpected() {
+        runCommand(command, fixtureName, expectedResult)
     }
 
     private def runCommand(String command, String fixtureName, boolean shouldSucceed) {
