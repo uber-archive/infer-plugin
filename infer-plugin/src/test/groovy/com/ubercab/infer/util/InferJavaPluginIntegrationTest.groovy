@@ -36,6 +36,16 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
 
                     compile 'com.intellij:annotations:5.1'
                }
+
+                eradicate {
+                    exclude.plus("src")
+                    include.plus("src")
+                }
+
+                infer {
+                    exclude.plus("src")
+                    include.plus("src")
+                }
             """
     }
 

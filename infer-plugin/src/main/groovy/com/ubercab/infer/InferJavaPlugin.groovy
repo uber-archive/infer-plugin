@@ -1,5 +1,7 @@
 package com.ubercab.infer
 
+import com.ubercab.infer.extension.EradicateExtension
+import com.ubercab.infer.extension.InferExtension
 import com.ubercab.infer.task.Capture
 import com.ubercab.infer.task.CheckForInfer
 import com.ubercab.infer.task.Eradicate
@@ -49,5 +51,8 @@ class InferJavaPlugin implements Plugin<Project> {
         inferTask.dependsOn(inferCaptureTask)
         inferTask.setGroup(Constants.GROUP)
         inferTask.setDescription("Runs Infer static analysis.")
+
+        project.extensions.create(Constants.EXTENSION_ERADICATE_NAME, EradicateExtension, project)
+        project.extensions.create(Constants.EXTENSION_INFER_NAME, InferExtension, project)
     }
 }
