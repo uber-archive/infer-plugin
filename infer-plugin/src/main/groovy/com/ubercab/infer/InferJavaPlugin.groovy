@@ -8,6 +8,7 @@ import com.ubercab.infer.task.Eradicate
 import com.ubercab.infer.task.Infer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 
 /**
  * Infer plug-in for standard Java projects.
@@ -41,6 +42,9 @@ class InferJavaPlugin implements Plugin<Project> {
             }
         }
         inferCaptureTask.dependsOn(checkForInferTask)
+
+        // Required to ensure dependency artifacts are available.
+        inferCaptureTask.dependsOn("processResources")
 
         def eradicateTask = project.tasks.create(Constants.TASK_ERADICATE, Eradicate)
         eradicateTask.dependsOn(inferCaptureTask)
