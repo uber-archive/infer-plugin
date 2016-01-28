@@ -54,14 +54,16 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
                     }
                 }
 
-                eradicate {
-                    exclude.plus("src")
-                    include.plus("src")
-                }
+                inferPlugin {
+                    eradicate {
+                        exclude.plus("src")
+                        include.plus("src")
+                    }
 
-                infer {
-                    exclude.plus("src")
-                    include.plus("src")
+                    infer {
+                        exclude.plus("src")
+                        include.plus("src")
+                    }
                 }
             """
     }

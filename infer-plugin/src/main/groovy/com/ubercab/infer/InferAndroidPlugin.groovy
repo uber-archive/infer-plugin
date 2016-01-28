@@ -1,8 +1,7 @@
 package com.ubercab.infer
 
 import com.android.build.gradle.api.BaseVariant
-import com.ubercab.infer.extension.EradicateExtension
-import com.ubercab.infer.extension.InferExtension
+import com.ubercab.infer.extension.InferPluginExtension
 import com.ubercab.infer.task.Capture
 import com.ubercab.infer.task.CheckForInfer
 import com.ubercab.infer.task.Eradicate
@@ -23,8 +22,7 @@ class InferAndroidPlugin implements Plugin<Project> {
             createInferTasks(project, project.android.libraryVariants)
         }
 
-        project.extensions.create(Constants.EXTENSION_ERADICATE_NAME, EradicateExtension, project)
-        project.extensions.create(Constants.EXTENSION_INFER_NAME, InferExtension, project)
+        project.extensions.create(Constants.EXTENSION_INFER_PLUGIN_NAME, InferPluginExtension, project)
     }
 
     private createInferTasks(Project project, Set<BaseVariant> variants) {

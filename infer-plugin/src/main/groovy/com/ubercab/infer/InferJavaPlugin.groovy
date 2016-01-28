@@ -1,14 +1,12 @@
 package com.ubercab.infer
 
-import com.ubercab.infer.extension.EradicateExtension
-import com.ubercab.infer.extension.InferExtension
+import com.ubercab.infer.extension.InferPluginExtension
 import com.ubercab.infer.task.Capture
 import com.ubercab.infer.task.CheckForInfer
 import com.ubercab.infer.task.Eradicate
 import com.ubercab.infer.task.Infer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 
 /**
  * Infer plug-in for standard Java projects.
@@ -56,7 +54,6 @@ class InferJavaPlugin implements Plugin<Project> {
         inferTask.setGroup(Constants.GROUP)
         inferTask.setDescription("Runs Infer static analysis.")
 
-        project.extensions.create(Constants.EXTENSION_ERADICATE_NAME, EradicateExtension, project)
-        project.extensions.create(Constants.EXTENSION_INFER_NAME, InferExtension, project)
+        project.extensions.create(Constants.EXTENSION_INFER_PLUGIN_NAME, InferPluginExtension, project)
     }
 }
