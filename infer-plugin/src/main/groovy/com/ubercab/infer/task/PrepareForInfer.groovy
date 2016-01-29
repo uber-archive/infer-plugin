@@ -33,6 +33,9 @@ public class PrepareForInfer extends DefaultTask {
     @Input Closure<String> sourceJavaVersion
     @Input Closure<String> targetJavaVersion
 
+    File classOutputDirectory = new File(getTemporaryDir(), "classes")
+    File generatedSourceOutputDirectory = new File(getTemporaryDir(), "generated-source")
+
     @TaskAction
     def prepareForInfer() {
         createInferConfig()
@@ -40,14 +43,16 @@ public class PrepareForInfer extends DefaultTask {
     }
 
     private def captureInferData() {
+        classOutputDirectory.mkdirs()
+        generatedSourceOutputDirectory.mkdirs()
+
         def outputDir = new File(project.getBuildDir(), "infer-out")
         outputDir.mkdirs()
 
-        def javacOutputDirPath = temporaryDir.absolutePath
-
         def result = RunCommandUtils.run("infer -i -a capture --out ${outputDir.absolutePath}"
-                + " -- javac -source ${sourceJavaVersion()} -target ${targetJavaVersion()} -d ${javacOutputDirPath} "
-                + "-s ${javacOutputDirPath} ${getJavacArguments()}", project.projectDir)
+                + " -- javac -source ${sourceJavaVersion()} -target ${targetJavaVersion()} " +
+                "-d ${classOutputDirectory.absolutePath} "
+                + "-s ${generatedSourceOutputDirectory.absolutePath} ${getJavacArguments()}", project.projectDir)
 
         if (!result.success) {
             throw new RuntimeException("Error capturing Infer data: " + result.stderr)
@@ -57,14 +62,14 @@ public class PrepareForInfer extends DefaultTask {
     private def createInferConfig() {
         FileWriter inferConfigFile = new FileWriter(project.projectDir.absolutePath + "/.inferConfig")
 
-        def eradicateExcludeWithGenerated = eradicateExclude()
-        def inferExcludeWithGenerated = inferExclude()
+        def eradicateExcludeWithGenerated = eradicateExclude().plus(generatedSourceOutputDirectory)
+        def inferExcludeWithGenerated = inferExclude().plus(generatedSourceOutputDirectory)
 
         JSONObject root = new JSONObject()
         root.put("eradicate_blacklist", getJSONArrayInInferFormat(eradicateExcludeWithGenerated))
-        root.put("eradicate_whitelist", getJSONArrayInInferFormat(eradicateInclude()))
+        root.put("eradicate_whitelist", getJSONArrayInInferFormat(eradicateInclude().files))
         root.put("infer_blacklist", getJSONArrayInInferFormat(inferExcludeWithGenerated))
-        root.put("infer_whitelist", getJSONArrayInInferFormat(inferInclude()))
+        root.put("infer_whitelist", getJSONArrayInInferFormat(inferInclude().files))
 
         try {
             inferConfigFile.write(root.toString() + "\n")
@@ -78,9 +83,9 @@ public class PrepareForInfer extends DefaultTask {
         }
     }
 
-    private JSONArray getJSONArrayInInferFormat(FileCollection fileCollection) {
+    private JSONArray getJSONArrayInInferFormat(Collection<File> files) {
         JSONArray returnArray = new JSONArray()
-        fileCollection.each { file ->
+        files.each { file ->
             Path pathAbsolute = Paths.get(file.toString())
             Path pathBase = Paths.get(project.projectDir.toString())
             Path pathRelative = pathBase.relativize(pathAbsolute)
