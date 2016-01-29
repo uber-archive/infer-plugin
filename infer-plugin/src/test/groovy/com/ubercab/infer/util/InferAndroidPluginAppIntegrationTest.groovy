@@ -86,17 +86,6 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                         testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
                     }
                 }
-                inferPlugin {
-                    eradicate {
-                        exclude.plus("src")
-                        include.plus("src")
-                    }
-
-                    infer {
-                        exclude.plus("src")
-                        include.plus("src")
-                    }
-                }
             """
     }
 

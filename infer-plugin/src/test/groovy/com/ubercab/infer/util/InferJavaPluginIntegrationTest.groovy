@@ -35,18 +35,6 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
                     provided 'javax.annotation:jsr250-api:1.0'
 
                     compile 'com.intellij:annotations:5.1'
-               }
-
-                inferPlugin {
-                    eradicate {
-                        exclude.plus("src")
-                        include.plus("src")
-                    }
-
-                    infer {
-                        exclude.plus("src")
-                        include.plus("src")
-                    }
                 }
             """
     }
@@ -57,6 +45,18 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void infer_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
+        javaTestBuildFile += """
+            inferPlugin {
+                infer {
+                    exclude = project.files("src")
+                }
+            }
+        """
+        runCommand("infer", "failing_infer_java_app", true)
+    }
+
+    @Test
     void infer_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
         runCommand("infer", "passing_infer_java_app", true)
     }
@@ -64,6 +64,18 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
     @Test
     void eradicate_withBadSource_shouldFailWhenInferFindsAWarning() {
         runCommand("eradicate", "failing_eradicate_java_app", false)
+    }
+
+    @Test
+    void eradicate_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
+        javaTestBuildFile += """
+            inferPlugin {
+                eradicate {
+                    exclude = project.files("src")
+                }
+            }
+        """
+        runCommand("eradicate", "failing_eradicate_java_app", true)
     }
 
     @Test

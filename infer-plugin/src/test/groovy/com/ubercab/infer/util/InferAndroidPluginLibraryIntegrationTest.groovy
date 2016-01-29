@@ -53,18 +53,6 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
                         testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
                     }
                 }
-
-                inferPlugin {
-                    eradicate {
-                        exclude.plus("src")
-                        include.plus("src")
-                    }
-
-                    infer {
-                        exclude.plus("src")
-                        include.plus("src")
-                    }
-                }
             """
     }
 
@@ -74,8 +62,32 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void eradicateDebug_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
+        androidTestBuildFile += """
+            inferPlugin {
+                eradicate {
+                    exclude = project.files("src")
+                }
+            }
+        """
+        runCommand("eradicateDebug", "failing_eradicate_android_project", true)
+    }
+
+    @Test
     void eradicateRelease_withBadSource_shouldFailWhenInferFindsAWarning() {
         runCommand("eradicateRelease", "failing_eradicate_android_project", false)
+    }
+
+    @Test
+    void eradicateRelease_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
+        androidTestBuildFile += """
+            inferPlugin {
+                eradicate {
+                    exclude = project.files("src")
+                }
+            }
+        """
+        runCommand("eradicateRelease", "failing_eradicate_android_project", true)
     }
 
     @Test
@@ -94,8 +106,32 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void inferDebug_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
+        androidTestBuildFile += """
+            inferPlugin {
+                infer {
+                    exclude = project.files("src")
+                }
+            }
+        """
+        runCommand("inferDebug", "failing_infer_android_project", true)
+    }
+
+    @Test
     void inferRelease_withBadSource_shouldFailWhenInferFindsAWarning() {
         runCommand("inferRelease", "failing_infer_android_project", false)
+    }
+
+    @Test
+    void inferRelease_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
+        androidTestBuildFile += """
+            inferPlugin {
+                infer {
+                    exclude = project.files("src")
+                }
+            }
+        """
+        runCommand("inferRelease", "failing_infer_android_project", true)
     }
 
     @Test

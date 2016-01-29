@@ -3,6 +3,8 @@ package com.ubercab.infer
 import com.ubercab.infer.extension.InferPluginExtension
 import com.ubercab.infer.task.Capture
 import com.ubercab.infer.task.CheckForInfer
+import com.ubercab.infer.task.CreateInferConfig
+import com.ubercab.infer.task.DeleteInferConfig
 import com.ubercab.infer.task.Eradicate
 import com.ubercab.infer.task.Infer
 import org.gradle.api.Plugin
@@ -55,5 +57,25 @@ class InferJavaPlugin implements Plugin<Project> {
         inferTask.setDescription("Runs Infer static analysis.")
 
         project.extensions.create(Constants.EXTENSION_INFER_PLUGIN_NAME, InferPluginExtension, project)
+
+        def createInferConfigTask = project.tasks.create("createInferConfig", CreateInferConfig) {
+            eradicateExclude = {
+                project.eradicate.exclude
+            }
+            eradicateInclude = {
+                project.eradicate.include
+            }
+            inferExclude = {
+                project.infer.exclude
+            }
+            inferInclude = {
+                project.infer.include
+            }
+        }
+        inferCaptureTask.dependsOn(createInferConfigTask)
+
+        def deleteInferConfigTask = project.tasks.create("deleteInferConfig", DeleteInferConfig)
+        inferTask.finalizedBy(deleteInferConfigTask)
+        eradicateTask.finalizedBy(deleteInferConfigTask)
     }
 }

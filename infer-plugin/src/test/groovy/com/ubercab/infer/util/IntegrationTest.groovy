@@ -36,6 +36,7 @@ class IntegrationTest {
             result = runner.buildAndFail()
             assert result.task(":${command}").outcome == TaskOutcome.FAILED
         }
+        assert !(new File(runner.projectDir.absolutePath + "/.inferConfig").exists())
     }
 
     private def setupTestWithFixture(String fixtureName, String buildFileContents) {

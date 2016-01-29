@@ -4,6 +4,8 @@ import com.android.build.gradle.api.BaseVariant
 import com.ubercab.infer.extension.InferPluginExtension
 import com.ubercab.infer.task.Capture
 import com.ubercab.infer.task.CheckForInfer
+import com.ubercab.infer.task.CreateInferConfig
+import com.ubercab.infer.task.DeleteInferConfig
 import com.ubercab.infer.task.Eradicate
 import com.ubercab.infer.task.Infer
 import org.gradle.api.Plugin
@@ -21,18 +23,35 @@ class InferAndroidPlugin implements Plugin<Project> {
         } else if (project.plugins.hasPlugin("com.android.library")) {
             createInferTasks(project, project.android.libraryVariants)
         }
-
         project.extensions.create(Constants.EXTENSION_INFER_PLUGIN_NAME, InferPluginExtension, project)
     }
 
     private createInferTasks(Project project, Set<BaseVariant> variants) {
         def checkForInferTask = project.tasks.create(Constants.TASK_CHECK_FOR_INFER, CheckForInfer)
 
+        def createInferConfigTask = project.tasks.create("createInferConfig", CreateInferConfig) {
+            eradicateExclude = {
+                project.eradicate.exclude
+            }
+            eradicateInclude = {
+                project.eradicate.include
+            }
+            inferExclude = {
+                project.infer.exclude
+            }
+            inferInclude = {
+                project.infer.include
+            }
+        }
+
+        def deleteInferConfigTask = project.tasks.create("deleteInferConfig", DeleteInferConfig)
+
         variants.all { BaseVariant variant ->
             def taskVariantName = variant.name.capitalize()
 
             def inferCaptureTask = createCaptureTask(project, taskVariantName, variant)
             inferCaptureTask.dependsOn(checkForInferTask)
+            inferCaptureTask.dependsOn(createInferConfigTask)
 
             // Required to get exploded-aar directory.
             inferCaptureTask.dependsOn("compile${taskVariantName}Sources")
@@ -45,6 +64,7 @@ class InferAndroidPlugin implements Plugin<Project> {
             } else {
                 eradicateTask.setDescription("Runs Infer's eradicate static analysis.")
             }
+            eradicateTask.setGroup(Constants.GROUP)
 
             def inferTask = project.tasks.create(Constants.TASK_INFER + taskVariantName, Infer)
             inferTask.dependsOn(inferCaptureTask)
@@ -55,6 +75,9 @@ class InferAndroidPlugin implements Plugin<Project> {
             } else {
                 inferTask.setDescription("Runs Infer static analysis.")
             }
+
+            inferTask.finalizedBy(deleteInferConfigTask)
+            eradicateTask.finalizedBy(deleteInferConfigTask)
         }
     }
 
