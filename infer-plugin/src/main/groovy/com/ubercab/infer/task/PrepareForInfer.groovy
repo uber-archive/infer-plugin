@@ -4,9 +4,11 @@ import com.amazonaws.util.json.JSONArray
 import com.amazonaws.util.json.JSONObject
 import com.ubercab.infer.util.JavacUtils
 import com.ubercab.infer.util.RunCommandUtils
+import groovy.io.FileType
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.UnknownConfigurationException
 import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.file.TmpDirTemporaryFileProvider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
@@ -60,8 +62,6 @@ public class PrepareForInfer extends DefaultTask {
     }
 
     private def createInferConfig() {
-        FileWriter inferConfigFile = new FileWriter(project.projectDir.absolutePath + "/.inferConfig")
-
         def eradicateExcludeWithGenerated = eradicateExclude().plus(generatedSourceOutputDirectory)
         def inferExcludeWithGenerated = inferExclude().plus(generatedSourceOutputDirectory)
 
@@ -71,16 +71,8 @@ public class PrepareForInfer extends DefaultTask {
         root.put("infer_blacklist", getJSONArrayInInferFormat(inferExcludeWithGenerated))
         root.put("infer_whitelist", getJSONArrayInInferFormat(inferInclude().files))
 
-        try {
-            inferConfigFile.write(root.toString() + "\n")
-
-        } catch (IOException e) {
-            e.printStackTrace()
-
-        } finally {
-            inferConfigFile.flush()
-            inferConfigFile.close()
-        }
+        project.file('.inferConfig').text = root.toString() + "\n"
+        project.file('.inferConfig').deleteOnExit()
     }
 
     private JSONArray getJSONArrayInInferFormat(Collection<File> files) {
@@ -127,7 +119,14 @@ public class PrepareForInfer extends DefaultTask {
         argumentsBuilder.append(JavacUtils.generateJavacArgument(compileDependencies() + providedDependencies(),
                 "-classpath"))
 
-        argumentsBuilder.append(JavacUtils.generateJavacArgument(sourceFiles(), " ", " "))
+        String sourceFileText = sourceFiles().join('\n')
+
+        TmpDirTemporaryFileProvider provider = new TmpDirTemporaryFileProvider()
+        File inferSourceFiles = provider.createTemporaryFile("infer", "sourceFiles", "/tmp")
+        inferSourceFiles.deleteOnExit()
+        inferSourceFiles.text = sourceFileText
+
+        argumentsBuilder.append("@${inferSourceFiles.absolutePath}")
 
         return argumentsBuilder.toString()
     }

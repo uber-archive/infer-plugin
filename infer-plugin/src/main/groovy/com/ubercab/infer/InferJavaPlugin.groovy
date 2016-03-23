@@ -1,10 +1,10 @@
 package com.ubercab.infer
 
 import com.ubercab.infer.extension.InferPluginExtension
+import com.ubercab.infer.task.DeleteInferConfig
 import com.ubercab.infer.task.PrepareForInfer
 import com.ubercab.infer.task.CheckForInfer
 
-import com.ubercab.infer.task.DeleteInferConfig
 import com.ubercab.infer.task.Eradicate
 import com.ubercab.infer.task.Infer
 import org.gradle.api.Plugin

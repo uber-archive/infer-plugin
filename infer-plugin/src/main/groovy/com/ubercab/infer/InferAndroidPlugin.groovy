@@ -2,9 +2,9 @@ package com.ubercab.infer
 
 import com.android.build.gradle.api.BaseVariant
 import com.ubercab.infer.extension.InferPluginExtension
+import com.ubercab.infer.task.DeleteInferConfig
 import com.ubercab.infer.task.PrepareForInfer
 import com.ubercab.infer.task.CheckForInfer
-import com.ubercab.infer.task.DeleteInferConfig
 import com.ubercab.infer.task.Eradicate
 import com.ubercab.infer.task.Infer
 import org.gradle.api.Plugin
@@ -27,7 +27,6 @@ class InferAndroidPlugin implements Plugin<Project> {
 
     private createInferTasks(Project project, Set<BaseVariant> variants) {
         def checkForInferTask = project.tasks.create(Constants.TASK_CHECK_FOR_INFER, CheckForInfer)
-
         def deleteInferConfigTask = project.tasks.create("deleteInferConfig", DeleteInferConfig)
 
         variants.all { BaseVariant variant ->
@@ -37,7 +36,7 @@ class InferAndroidPlugin implements Plugin<Project> {
             inferCaptureTask.dependsOn(checkForInferTask)
 
             // Required to get exploded-aar directory.
-            inferCaptureTask.dependsOn("compile${taskVariantName}Sources")
+            inferCaptureTask.dependsOn("generate${taskVariantName}Sources")
 
             def eradicateTask = project.tasks.create(Constants.TASK_ERADICATE + taskVariantName, Eradicate)
             eradicateTask.dependsOn(inferCaptureTask)
@@ -82,19 +81,28 @@ class InferAndroidPlugin implements Plugin<Project> {
                 project.files(project.android.bootClasspath)
             }
             compileDependencies = {
-                project.configurations.getByName("compile") +
-                        project.configurations.getByName("${variant.name}Compile") +
-                        project.files(project.fileTree(dir: "${project.buildDir.path}/intermediates/exploded-aar", include: "**/*.jar").files)
+                project.files(project.fileTree(dir: "${project.buildDir.path}/intermediates/exploded-aar",
+                        include: "**/*.jar")).plus(
+                        project.configurations.asList().findAll {
+                            String configName = it.name.toLowerCase()
+                            configName.contains("compile") && !configName.contains("test")
+                        } as Iterable<File>
+                )
             }
+
             processorDependencies = {
                 project.configurations.getByName("apt")
             }
             providedDependencies = {
                 project.configurations.getByName("provided") +
-                project.configurations.getByName ("${variant.name}Provided")
+                        project.configurations.getByName("${variant.name}Provided")
             }
             sourceFiles = {
-                variant.javaCompiler.source
+                def result = variant.javaCompiler.source
+                variant.variantData.extraGeneratedSourceFolders.collect {
+                    result.plus(project.fileTree(dir: it, include: "**/*.java"))
+                }
+                result
             }
             sourceJavaVersion = {
                 variant.javaCompiler.sourceCompatibility
