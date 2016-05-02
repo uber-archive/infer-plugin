@@ -1,5 +1,5 @@
 package com.ubercab.infer_sample;
 
-import com.ubercab.core.app.CoreApplication;
+import android.app.Application;
 
-public class InferPluginApplication extends CoreApplication { }
+public class InferPluginApplication extends Application { }

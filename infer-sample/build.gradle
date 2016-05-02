@@ -1,13 +1,16 @@
-apply plugin: 'bootstrap-android-app'
+apply plugin: 'com.android.application'
+
+repositories {
+    jcenter()
+}
 
 dependencies {
+    compile 'com.android.support:support-annotations:22.2.0'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.ubercab:core:2.4.1'
-    compile 'com.ubercab:mvc:0.2.0'
-    compile 'com.ubercab:ui:1.3.1'
 }
 
 android {
+    buildToolsVersion "23.0.2"
     compileSdkVersion 23
 
     defaultConfig {
@@ -16,6 +19,13 @@ android {
         targetSdkVersion 22
 
         buildConfigField "String", "APP_NAME", "\"inferplugin\""
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'LICENSE.txt'
+        exclude 'LICENSE'
+        exclude 'NOTICE'
     }
 
     signingConfigs {

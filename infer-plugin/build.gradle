@@ -1,12 +1,16 @@
-apply plugin: 'bootstrap-groovy'
+apply plugin: 'groovy'
 
 group = "com.ubercab"
+
+repositories {
+    jcenter()
+}
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    compile 'com.android.tools.build:gradle:2.0.0-alpha3'
+    compile 'com.android.tools.build:gradle:2.1.0'
 
     testCompile gradleTestKit()
 }

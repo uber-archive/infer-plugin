@@ -2,12 +2,11 @@ allprojects {
     beforeEvaluate {
         project.buildscript {
             repositories {
-                mavenLocal()
-                maven { url 'http://artifactory.uber.internal:4587/artifactory/mobile' }
+                jcenter()
             }
 
             dependencies {
-                classpath "com.ubercab:bootstrap:11.+"
+                classpath 'com.android.tools.build:gradle:2.1.0'
             }
         }
     }

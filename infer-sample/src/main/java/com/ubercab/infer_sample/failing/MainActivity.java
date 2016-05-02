@@ -1,18 +1,16 @@
 package com.ubercab.infer_sample.failing;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.ubercab.infer_sample.Foo;
 import com.ubercab.infer_sample.FooManager;
 import com.ubercab.infer_sample.R;
-import com.ubercab.mvc.app.Controller;
-import com.ubercab.mvc.app.MvcActivity;
 
 import java.util.HashMap;
 
-public class MainActivity extends MvcActivity {
+public class MainActivity extends Activity {
 
     // This is a nullable member that is initialized later in the lifecycle.
     @Nullable private Foo foo;
@@ -48,12 +46,6 @@ public class MainActivity extends MvcActivity {
         }
         FooManager fooManager = new FooManager(foo);
         fooManager.initialize();
-    }
-
-    @NonNull
-    @Override
-    protected Controller createController() {
-        return new MainController(this);
     }
 
     //This method should be annotated Nullable

@@ -4,7 +4,6 @@ import com.amazonaws.util.json.JSONArray
 import com.amazonaws.util.json.JSONObject
 import com.ubercab.infer.util.JavacUtils
 import com.ubercab.infer.util.RunCommandUtils
-import groovy.io.FileType
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.UnknownConfigurationException
 import org.gradle.api.file.FileCollection

@@ -7,9 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.ubercab.infer_sample.R;
-import com.ubercab.ui.FloatingLabelEditText;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 public class MainFragment extends Fragment {
 
     //ButterKnife example. Won't get marked Nullable.
-    @Bind(R.id.editor) FloatingLabelEditText editor;
+    @Bind(R.id.editor) EditText editor;
     //This is a member that was never initialized should be Nullable.
     private String neverInitialized;
 
