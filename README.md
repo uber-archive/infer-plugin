@@ -29,6 +29,22 @@ apply plugin: 'java'
 apply plugin: 'com.ubercab.infer.java'
 ```
 
+## Including and Excluding
+
+In the build.gradle of the project that applies the plugin:
+```
+inferPlugin {
+    infer {
+        include = project.files("<PATH_TO_INCLUDE>")
+        exclude = project.files("<PATH_TO_EXCLUDE>")
+    }
+    eradicate {
+        include = project.files("<PATH_TO_INCLUDE>")
+        exclude = project.files("<PATH_TO_EXCLUDE>")
+    }
+}
+```
+
 ## Tasks
 
 * `infer` - runs Infer's standard analyzer.
