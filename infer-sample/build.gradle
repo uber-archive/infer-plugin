@@ -14,7 +14,7 @@ android {
     compileSdkVersion 23
 
     defaultConfig {
-        applicationId "com.ubercab.inferplugin"
+        applicationId "com.uber.inferplugin"
         minSdkVersion 15
         targetSdkVersion 22
 
