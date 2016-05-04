@@ -26,7 +26,7 @@ apply plugin: 'com.uber.infer.android'
 
 ```
 apply plugin: 'java'
-apply plugin: 'com.ubercab.infer.java'
+apply plugin: 'com.uber.infer.java'
 ```
 
 ## Including and Excluding
