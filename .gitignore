@@ -1,0 +1,9 @@
+.gradle
+local.properties
+.idea
+*.iml
+build
+.DS_Store
+checkstyle*.xml
+.swp
+infer-out/

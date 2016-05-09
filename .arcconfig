@@ -1,0 +1,7 @@
+{
+    "project_id": "mobile/infer-plugin",
+    "conduit_uri": "https://code.uberinternal.com/",
+    "history.immutable": false,
+    "unit.engine": "UberMultiTestEngine",
+    "unit.engine.multi.engines": ["UberTestPlanTestEngine", "UberGradleTestEngine"]
+}
