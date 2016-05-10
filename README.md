@@ -9,7 +9,7 @@ Add the plug-in dependency and apply it in your project's `build.gradle`:
 buildscript {
     dependencies {
         ...
-        classpath "com.uber:infer-plugin:MAJOR.MINOR.PATCH"
+        classpath "com.uber:infer-plugin:0.6.0"
     }
 }
 ```

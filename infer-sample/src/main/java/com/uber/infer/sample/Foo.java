@@ -1,4 +1,4 @@
-package com.uber.infer_sample;
+package com.uber.infer.sample;
 
 public class Foo {
 

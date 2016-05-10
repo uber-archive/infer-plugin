@@ -1,7 +1,5 @@
 apply plugin: 'groovy'
 
-group = "com.uber"
-
 repositories {
     jcenter()
 }

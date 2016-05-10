@@ -3,9 +3,7 @@ package com.uber.infer.util
 import org.gradle.api.file.FileCollection
 
 /**
-
  * Utilities for creating Javac commands.
-
  */
 public final class JavacUtils {
 

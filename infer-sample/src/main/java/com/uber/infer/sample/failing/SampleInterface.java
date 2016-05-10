@@ -1,4 +1,4 @@
-package com.uber.infer_sample.failing;
+package com.uber.infer.sample.failing;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

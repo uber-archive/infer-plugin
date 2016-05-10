@@ -1,12 +1,12 @@
-package com.uber.infer_sample.failing;
+package com.uber.infer.sample.failing;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.uber.infer_sample.Foo;
-import com.uber.infer_sample.FooManager;
-import com.uber.infer_sample.R;
+import com.uber.infer.sample.Foo;
+import com.uber.infer.sample.FooManager;
+import com.uber.infer.sample.R;
 
 import java.util.HashMap;
 
