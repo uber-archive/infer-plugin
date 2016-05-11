@@ -31,3 +31,5 @@ task createClasspathManifest {
 dependencies {
     testRuntime files(createClasspathManifest)
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
