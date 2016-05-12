@@ -7,9 +7,12 @@ This Gradle plug-in creates tasks to run [Infer](http://fbinfer.com) on Android 
 Add the plug-in dependency and apply it in your project's `build.gradle`:
 ```
 buildscript {
+    repositories {
+        mavenCentral()
+    }
     dependencies {
         ...
-        classpath "com.uber:infer-plugin:0.6.0"
+        classpath "com.uber:infer-plugin:0.7.0"
     }
 }
 ```
