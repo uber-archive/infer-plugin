@@ -4,6 +4,8 @@ This Gradle plug-in creates tasks to run [Infer](http://fbinfer.com) on Android 
 
 ## Integration
 
+To use this plug-in, [you must have Infer installed](http://fbinfer.com/docs/getting-started.html).
+
 Add the plug-in dependency and apply it in your project's `build.gradle`:
 ```
 buildscript {
