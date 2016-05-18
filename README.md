@@ -7,7 +7,7 @@ This Gradle plug-in creates tasks to run [Infer](http://fbinfer.com) on Android 
 To use this plug-in, [you must have Infer installed](http://fbinfer.com/docs/getting-started.html).
 
 Add the plug-in dependency and apply it in your project's `build.gradle`:
-```
+```groovy
 buildscript {
     repositories {
         mavenCentral()
@@ -22,14 +22,14 @@ buildscript {
 
 ### Android
 
-```
+```groovy
 apply plugin: 'com.android.application'
 apply plugin: 'com.uber.infer.android'
 ```
 
 ### Java
 
-```
+```groovy
 apply plugin: 'java'
 apply plugin: 'com.uber.infer.java'
 ```
@@ -37,7 +37,7 @@ apply plugin: 'com.uber.infer.java'
 ## Including and Excluding
 
 In the build.gradle of the project that applies the plugin:
-```
+```groovy
 inferPlugin {
     infer {
         include = project.files("<PATH_TO_INCLUDE>")
