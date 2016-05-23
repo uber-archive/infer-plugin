@@ -61,3 +61,11 @@ For Android projects, the plug-in will create a task for each build variant in y
 * `eradicateVariant` - runs Infer's [Eradicate](http://fbinfer.com/docs/eradicate.html) analyzer.
 
 For a specific list of tasks available on your project, run Gradle's `tasks` command.
+
+## Contributors
+
+We'd love for you to contribute to our open source projects. Before we can accept your contributions, we kindly ask you to sign our [Uber Contributor License Agreement](https://docs.google.com/a/uber.com/forms/d/1pAwS_-dA1KhPlfxzYLBqK6rsSWwRwH95OCCZrcsY5rk/viewform).
+
+- If you **find a bug**, open an issue or submit a fix via a pull request.
+- If you **have a feature request**, open an issue or submit an implementation via a pull request
+- If you **want to contribute**, submit a pull request.
