@@ -43,15 +43,15 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
 
                     repositories {
                         mavenLocal()
-                        maven { url 'http://artifactory.uber.internal:4587/artifactory/mobile' }
+                        jcenter()
                     }
 
                     dependencies {
-                        apt 'com.ubercab:rave-compiler:0.4.0'
+                        apt 'com.uber:rave-compiler:0.6.0'
 
                         compile 'com.android.support:support-annotations:23.0.1'
                         compile 'com.intellij:annotations:5.1'
-                        compile 'com.ubercab:rave:0.4.0'
+                        compile 'com.uber:rave:0.6.0'
 
                         // Annotations included to test provided support.
                         provided 'javax.annotation:jsr250-api:1.0'

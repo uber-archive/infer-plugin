@@ -1,9 +1,8 @@
 package com.uber.infer.task
 
-import com.amazonaws.util.json.JSONArray
-import com.amazonaws.util.json.JSONObject
 import com.uber.infer.util.JavacUtils
 import com.uber.infer.util.RunCommandUtils
+import groovy.json.JsonBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.UnknownConfigurationException
 import org.gradle.api.file.FileCollection
@@ -13,7 +12,6 @@ import org.gradle.api.tasks.TaskAction
 
 import java.nio.file.Path
 import java.nio.file.Paths
-
 /**
  * Responsible for capturing Infer metadata for future analysis.
  */
@@ -64,25 +62,25 @@ public class PrepareForInfer extends DefaultTask {
         def eradicateExcludeWithGenerated = eradicateExclude().plus(generatedSourceOutputDirectory)
         def inferExcludeWithGenerated = inferExclude().plus(generatedSourceOutputDirectory)
 
-        JSONObject root = new JSONObject()
-        root.put("eradicate_blacklist", getJSONArrayInInferFormat(eradicateExcludeWithGenerated))
-        root.put("eradicate_whitelist", getJSONArrayInInferFormat(eradicateInclude().files))
-        root.put("infer_blacklist", getJSONArrayInInferFormat(inferExcludeWithGenerated))
-        root.put("infer_whitelist", getJSONArrayInInferFormat(inferInclude().files))
+        Map<String, Object> config = new HashMap<String, Object>()
+        config.put("eradicate_blacklist", getPathsArrayInInferFormat(eradicateExcludeWithGenerated))
+        config.put("eradicate_whitelist", getPathsArrayInInferFormat(eradicateInclude().files))
+        config.put("infer_blacklist", getPathsArrayInInferFormat(inferExcludeWithGenerated))
+        config.put("infer_whitelist", getPathsArrayInInferFormat(inferInclude().files))
 
-        project.file('.inferConfig').text = root.toString() + "\n"
+        project.file('.inferConfig').text = new JsonBuilder(config).toPrettyString() + "\n"
         project.file('.inferConfig').deleteOnExit()
     }
 
-    private JSONArray getJSONArrayInInferFormat(Collection<File> files) {
-        JSONArray returnArray = new JSONArray()
+    private List<String> getPathsArrayInInferFormat(Collection<File> files) {
+        List<String> paths = new ArrayList<>();
         files.each { file ->
             Path pathAbsolute = Paths.get(file.toString())
             Path pathBase = Paths.get(project.projectDir.toString())
             Path pathRelative = pathBase.relativize(pathAbsolute)
-            returnArray.put(pathRelative.toString())
+            paths.add(pathRelative.toString())
         }
-        return returnArray
+        return paths
     }
 
     /**
