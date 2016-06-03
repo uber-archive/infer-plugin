@@ -11,12 +11,12 @@ dependencies {
 
 android {
     buildToolsVersion "23.0.2"
-    compileSdkVersion 23
+    compileSdkVersion 21
 
     defaultConfig {
         applicationId "com.uber.inferplugin"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 21
 
         buildConfigField "String", "APP_NAME", "\"inferplugin\""
     }
