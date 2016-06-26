@@ -7,6 +7,7 @@ import com.uber.infer.task.PrepareForInfer
 import com.uber.infer.task.CheckForInfer
 import com.uber.infer.task.Eradicate
 import com.uber.infer.task.Infer
+import com.uber.infer.util.ConfigurationUtils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -91,7 +92,7 @@ class InferAndroidPlugin implements Plugin<Project> {
             }
 
             processorDependencies = {
-                project.configurations.getByName("apt")
+                ConfigurationUtils.getAvailable(project, 'apt', 'annotationProcessor')
             }
             providedDependencies = {
                 project.configurations.getByName("provided") +

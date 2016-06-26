@@ -2,10 +2,23 @@ package com.uber.infer.util
 
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
+@RunWith(Parameterized)
 class InferJavaPluginIntegrationTest extends IntegrationTest {
 
     private String javaTestBuildFile
+    private String providedConfiguration
+
+    @Parameterized.Parameters static Collection<Object[]> data() {
+        def data = ['provided', 'compileOnly']
+        return data.collect { [it] as Object[] }
+    }
+
+    InferJavaPluginIntegrationTest(String providedConfiguration) {
+        this.providedConfiguration = providedConfiguration
+    }
 
     @Before
     void setup() {
@@ -32,7 +45,7 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
 
                 dependencies {
                     // Annotations included to test provided support.
-                    provided 'javax.annotation:jsr250-api:1.0'
+                    ${providedConfiguration} 'javax.annotation:jsr250-api:1.0'
 
                     compile 'com.intellij:annotations:5.1'
                 }

@@ -1,15 +1,10 @@
 package com.uber.infer
 
 import com.uber.infer.extension.InferPluginExtension
-import com.uber.infer.task.DeleteInferConfig
-import com.uber.infer.task.PrepareForInfer
-import com.uber.infer.task.CheckForInfer
-
-import com.uber.infer.task.Eradicate
-import com.uber.infer.task.Infer
+import com.uber.infer.task.*
+import com.uber.infer.util.ConfigurationUtils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-
 /**
  * Infer plug-in for standard Java projects.
  */
@@ -26,10 +21,10 @@ class InferJavaPlugin implements Plugin<Project> {
                 project.configurations.getByName("compile")
             }
             processorDependencies = {
-                project.configurations.getByName("apt")
+                ConfigurationUtils.getAvailable(project, 'apt')
             }
             providedDependencies = {
-                project.configurations.getByName("provided")
+                ConfigurationUtils.getAvailable(project, 'provided', 'compileOnly')
             }
             sourceFiles = {
                 project.sourceSets.main.java
