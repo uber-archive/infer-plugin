@@ -33,6 +33,7 @@ public class PrepareForInfer extends DefaultTask {
     @Input Closure<String> targetJavaVersion
 
     File classOutputDirectory = new File(getTemporaryDir(), "classes")
+    File buildOutputDirectory = new File(getTemporaryDir(), "build")
     File generatedSourceOutputDirectory = new File(getTemporaryDir(), "generated-source")
 
     @TaskAction
@@ -43,6 +44,7 @@ public class PrepareForInfer extends DefaultTask {
 
     private def captureInferData() {
         classOutputDirectory.mkdirs()
+        buildOutputDirectory.mkdirs()
         generatedSourceOutputDirectory.mkdirs()
 
         def outputDir = new File(project.getBuildDir(), "infer-out")
@@ -59,8 +61,8 @@ public class PrepareForInfer extends DefaultTask {
     }
 
     private def createInferConfig() {
-        def eradicateExcludeWithGenerated = eradicateExclude().plus(generatedSourceOutputDirectory)
-        def inferExcludeWithGenerated = inferExclude().plus(generatedSourceOutputDirectory)
+        def eradicateExcludeWithGenerated = eradicateExclude().plus(generatedSourceOutputDirectory).plus(buildOutputDirectory)
+        def inferExcludeWithGenerated = inferExclude().plus(generatedSourceOutputDirectory).plus(buildOutputDirectory)
 
         Map<String, Object> config = new HashMap<String, Object>()
         config.put("eradicate_blacklist", getPathsArrayInInferFormat(eradicateExcludeWithGenerated))
