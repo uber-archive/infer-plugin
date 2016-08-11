@@ -14,7 +14,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath "com.uber:infer-plugin:0.7.2"
+        classpath "com.uber:infer-plugin:0.7.3"
     }
 }
 ```
