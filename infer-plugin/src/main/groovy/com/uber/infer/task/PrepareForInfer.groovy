@@ -48,7 +48,7 @@ public class PrepareForInfer extends DefaultTask {
         def outputDir = new File(project.getBuildDir(), "infer-out")
         outputDir.mkdirs()
 
-        def result = RunCommandUtils.run("infer -i -a capture --out ${outputDir.absolutePath}"
+        def result = RunCommandUtils.run("infer -a capture --out ${outputDir.absolutePath}"
                 + " -- javac -source ${sourceJavaVersion()} -target ${targetJavaVersion()} " +
                 "-d ${classOutputDirectory.absolutePath} "
                 + "-s ${generatedSourceOutputDirectory.absolutePath} ${getJavacArguments()}", project.projectDir)
