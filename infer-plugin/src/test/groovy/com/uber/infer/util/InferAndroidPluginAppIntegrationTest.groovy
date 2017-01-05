@@ -46,7 +46,7 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                     }
 
                     dependencies {
-                        classpath 'com.android.tools.build:gradle:1.5.0'
+                        classpath 'com.android.tools.build:gradle:2.3.0-beta1'
                         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
                         classpath files($pluginClasspath)
                     }
@@ -61,12 +61,12 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                 }
 
                 android {
-                    buildToolsVersion "23.0.2"
-                    compileSdkVersion 23
+                    buildToolsVersion "25.0.0"
+                    compileSdkVersion 25
 
                     defaultConfig {
                         minSdkVersion 23
-                        targetSdkVersion 23
+                        targetSdkVersion 25
                     }
 
                     productFlavors {
