@@ -83,13 +83,16 @@ class InferAndroidPlugin implements Plugin<Project> {
             }
             compileDependencies = {
                 project.files(project.fileTree(dir: "${project.buildDir.path}/intermediates/exploded-aar",
-                        include: "**/*.jar")).plus(project.files(
-                        project.configurations.asList().findAll {
-                            String configName = it.name.toLowerCase()
-                            configName.contains("compile") && !configName.contains("test")
-                            it.asFileTree
-                        })
-                )
+                    include: "**/*.jar")) +
+                project.files(project.fileTree(dir: "~/.android/build-cache",
+                    include: "**/*.jar")) +
+                project.files(project.fileTree(dir: "~/.gradle/caches",
+                    include: "**/*.jar")) + project.files(
+                    project.configurations.asList().findAll {
+                        String configName = it.name.toLowerCase()
+                        configName.contains("compile") && !configName.contains("test")
+                        it.asFileTree
+                    })
             }
 
             processorDependencies = {

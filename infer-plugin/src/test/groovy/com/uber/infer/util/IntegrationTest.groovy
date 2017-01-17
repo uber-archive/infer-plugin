@@ -8,7 +8,7 @@ import org.junit.rules.TemporaryFolder
 
 class IntegrationTest {
 
-    static String VERSION_GRADLE = "2.13"
+    static String VERSION_GRADLE = "3.2"
 
     @Rule
     public TemporaryFolder mFolder = new TemporaryFolder()

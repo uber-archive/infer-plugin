@@ -12,6 +12,8 @@ import org.gradle.api.tasks.TaskAction
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.concurrent.TimeUnit
+
 /**
  * Responsible for capturing Infer metadata for future analysis.
  */
@@ -34,11 +36,24 @@ public class PrepareForInfer extends DefaultTask {
 
     File classOutputDirectory = new File(getTemporaryDir(), "classes")
     File generatedSourceOutputDirectory = new File(getTemporaryDir(), "generated-source")
+    FileCollection additionalClasses = project.files();
 
     @TaskAction
     def prepareForInfer() {
+        captureAdditionalDependencies()
         createInferConfig()
         captureInferData()
+    }
+
+    private def captureAdditionalDependencies() {
+        compileDependencies().each { dependency ->
+            if (dependency.absolutePath.endsWith(".aar")) {
+                "unzip ${dependency.absolutePath} -d ${dependency.parentFile.toString()}".execute().waitFor(2000, TimeUnit.MILLISECONDS)
+                if (new File(dependency.parentFile.toString() + "/classes.jar").exists()) {
+                    additionalClasses += (project.files(dependency.parentFile.toString() + "/classes.jar"))
+                }
+            }
+        }
     }
 
     private def captureInferData() {
@@ -47,7 +62,6 @@ public class PrepareForInfer extends DefaultTask {
 
         def outputDir = new File(project.getBuildDir(), "infer-out")
         outputDir.mkdirs()
-
         def result = RunCommandUtils.run("infer -a capture --out ${outputDir.absolutePath}"
                 + " -- javac -source ${sourceJavaVersion()} -target ${targetJavaVersion()} " +
                 "-d ${classOutputDirectory.absolutePath} "
@@ -113,7 +127,7 @@ public class PrepareForInfer extends DefaultTask {
             argumentsBuilder.append(JavacUtils.generateJavacArgument(processorDependenciesList, '-processorpath'))
         }
 
-        argumentsBuilder.append(JavacUtils.generateJavacArgument(compileDependencies() + providedDependencies(),
+        argumentsBuilder.append(JavacUtils.generateJavacArgument(additionalClasses + compileDependencies() + providedDependencies(),
                 "-classpath"))
 
         String sourceFileText = sourceFiles().join('\n')
