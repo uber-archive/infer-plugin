@@ -1,0 +1,41 @@
+# Disabling sudo moves build to the Container Based Infrastructure on Travis CI
+
+language: android
+
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      dist: trusty
+      group: legacy
+      services:
+        - docker
+      jdk: oraclejdk8
+      before_install:
+        - source .scripts/prepare-container-with-infer.sh
+        # run container with installed Infer
+        - docker run -itd $INFER_IMAGE_NAME
+        # copy build folder ("infer-plugin") to container
+        - docker cp $TRAVIS_BUILD_DIR $(docker ps -q):/
+
+before_install:
+  # Prepare Android licenses (required to install Anroid dependencies)
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+script:
+  # install Android dependencies and run checks in one command inside docker container
+  # if we separate this into separate `docker exec` commands, than Android SDK dependencies will not be saved
+  # Android SDK folder should be copied as well, as Docker uses AUFS by default
+  # which doesn't support all operations required by sdk manager
+  # see https://github.com/travis-ci/travis-ci/issues/2848#issuecomment-58780257
+  - docker exec -it $(docker ps -q) /bin/bash -c 'export ANDROID_HOME=${TRAVIS_BUILD_DIR}/android-sdk; export PATH=${ANDROID_HOME}/:${ANDROID_HOME}/tools/:${ANDROID_HOME}/platform-tools/:${PATH}; cp -R /opt/android-sdk-linux ${TRAVIS_BUILD_DIR}/android-sdk; eval echo \"y\" | android update sdk --no-ui --force --all --filter extra-android-m2repository; eval echo \"y\" | android update sdk --no-ui --force --all --filter extra-google-m2repository; eval echo \"y\" | android update sdk --no-ui --force --all --filter extra-android-support; eval echo \"y\" | android update sdk --no-ui --force --all --filter extra-google-google_play_services; eval echo \"y\" | android update sdk --no-ui --force --all --filter tools; eval echo \"y\" | android update sdk --no-ui --force --all --filter platform-tools; eval echo \"y\" | android update sdk --no-ui --force --all --filter android-23; eval echo \"y\" | android update sdk --no-ui --force --all --filter build-tools-23.0.2; cd /infer-plugin; ./gradlew build --stacktrace; exit $?'
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+    - $HOME/.android
+    - ${TRAVIS_BUILD_DIR}/gradle/caches/
+    - ${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/

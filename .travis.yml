@@ -1,0 +1,53 @@
+language: android
+
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      jdk: oraclejdk8
+      env:
+        - DISABLED_CONFIG=true
+      android:
+        components:
+          - platform-tools
+          - tools
+          - build-tools-23.0.2
+          - android-23
+      before_install:
+        # currently, infer-plugin tests fail on Linux
+        # more info at https://github.com/uber-common/infer-plugin/issues/31
+        - "echo \"DISABLED CONFIGURATION\"; exit 0"
+        # compile and install Infer from sources
+        - source .scripts/travis.linux.before_install.sh
+        # use travis-infer-docker.yml for Infer with Docker installation
+    - os: osx
+      osx_image: xcode8
+      env:
+        - DISABLED_CONFIG=true
+      before_install:
+        # infer-plugin isn't compatible with JDK-7, adjustments needed
+        - "echo \"DISABLED CONFIGURATION\"; exit 0"
+        # jdk7
+        - source .scripts/travis.osx.jdk7.before_install.sh
+    - os: osx
+      # jdk8
+      osx_image: xcode8
+      env:
+        - WORKING_CONFIG=true
+      before_install:
+        - source .scripts/travis.osx.base.before_install.sh
+
+script:
+  # navigate back to the project folder (Infer installation process changes dir)
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd $TRAVIS_BUILD_DIR ; fi
+  - which infer
+  - infer --version
+  - ./gradlew build --stacktrace
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+    - $HOME/.android
+    - ${TRAVIS_BUILD_DIR}/gradle/caches/
+    - ${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/
