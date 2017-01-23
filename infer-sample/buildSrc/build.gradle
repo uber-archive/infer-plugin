@@ -1,0 +1,24 @@
+repositories {
+    jcenter()
+}
+
+apply plugin: 'groovy'
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile 'com.android.tools.build:gradle:2.2.2'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir '../../infer-plugin/src/main/groovy'
+        }
+
+        resources {
+            srcDir '../../infer-plugin/src/main/resources'
+        }
+    }
+}

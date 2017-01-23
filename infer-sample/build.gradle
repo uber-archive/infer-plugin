@@ -1,47 +1,14 @@
-apply plugin: 'com.android.application'
-
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile 'com.android.support:support-annotations:22.2.0'
-    compile 'com.jakewharton:butterknife:7.0.1'
-}
-
-android {
-    buildToolsVersion "23.0.2"
-    compileSdkVersion 23
-
-    defaultConfig {
-        applicationId "com.uber.inferplugin"
-        minSdkVersion 15
-        targetSdkVersion 22
-
-        buildConfigField "String", "APP_NAME", "\"inferplugin\""
-    }
-
-    packagingOptions {
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
-        exclude 'LICENSE.txt'
-        exclude 'LICENSE'
-        exclude 'NOTICE'
-    }
-
-    signingConfigs {
-        debug {
-            storeFile file('config/signing/debug.keystore')
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
         }
     }
-    lintOptions {
-        abortOnError true
-        lintConfig file("config/lint/lint.xml")
-        error 'ExtraText'
-        warning 'AppCompatResource'
+    repositories {
+        jcenter()
     }
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
-    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2.1'
 }
