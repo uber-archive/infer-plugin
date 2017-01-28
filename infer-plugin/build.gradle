@@ -11,7 +11,7 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    compile 'com.android.tools.build:gradle:2.1.0'
+    compile 'com.android.tools.build:gradle:2.2.2'
 
     testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
@@ -36,4 +36,4 @@ dependencies {
     testRuntime files(createClasspathManifest)
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: file('../gradle/gradle-mvn-push.gradle')
