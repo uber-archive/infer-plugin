@@ -96,6 +96,17 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
         runCommand("eradicate", "passing_eradicate_java_app", true)
     }
 
+
+    @Test
+    void check_runInferWithGoodSource_shouldPassWhenInferFindsNoWarnings() {
+        runCommand("check", "passing_infer_java_app", true)
+    }
+
+    @Test
+    void check_runEradicateWithGoodSource_shouldPassWhenInferFindsNoWarnings() {
+        runCommand("check", "passing_eradicate_java_app", true)
+    }
+
     private def runCommand(String command, String fixtureName , boolean shouldSucceed) {
         runCommand(command, fixtureName, javaTestBuildFile, shouldSucceed)
     }

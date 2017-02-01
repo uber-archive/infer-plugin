@@ -8,5 +8,6 @@ class Constants {
     static final String TASK_CHECK_FOR_INFER = "inferCheckForCommand"
     static final String TASK_ERADICATE = "eradicate"
     static final String TASK_INFER = "infer"
+    static final String TASK_CHECK = "check"
     static final String TASK_PREPARE_FOR_INFER = "inferPrepare"
 }

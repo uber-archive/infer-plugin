@@ -79,7 +79,11 @@ class InferAndroidPluginAppIntegrationTest extends IntegrationTest {
                         mavenLocal()
                         jcenter()
                     }
-
+                    
+                    lintOptions {
+                        abortOnError false
+                    }
+                                         
                     dependencies {
                         apt 'com.uber:rave-compiler:0.6.0'
 

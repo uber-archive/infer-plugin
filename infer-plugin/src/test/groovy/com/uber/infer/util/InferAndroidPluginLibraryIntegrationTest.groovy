@@ -45,6 +45,10 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
                         mavenLocal()
                         jcenter()
                     }
+                    
+                    lintOptions {
+                        abortOnError false
+                    }
 
                     dependencies {
                         apt 'com.uber:rave-compiler:0.6.0'
@@ -151,6 +155,16 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
     @Test
     void inferRelease_withGoodSource_shouldPassWhenInferFindsNoWarnings() {
         runCommand("inferRelease", "passing_infer_android_project", true)
+    }
+
+    @Test
+    void check_runInferWithGoodSource_shouldPassWhenInferFindsNoWarnings() {
+        runCommand("check", "passing_infer_android_project", true)
+    }
+
+    @Test
+    void check_runEradicateWithGoodSource_shouldPassWhenInferFindsNoWarnings() {
+        runCommand("check", "passing_eradicate_android_project", true)
     }
 
     private def runCommand(String command, String fixtureName, boolean shouldSucceed) {
