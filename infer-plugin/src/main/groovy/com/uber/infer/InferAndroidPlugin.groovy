@@ -10,6 +10,7 @@ import com.uber.infer.task.Infer
 import com.uber.infer.util.ConfigurationUtils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 
 /**
  * Infer plug-in for Android projects. This generates tasks for each Android build variant.
@@ -58,6 +59,9 @@ class InferAndroidPlugin implements Plugin<Project> {
             } else {
                 inferTask.setDescription("Runs Infer static analysis.")
             }
+
+            makeTaskRunWithCheck(project, inferTask)
+            makeTaskRunWithCheck(project, eradicateTask)
 
             inferTask.finalizedBy(deleteInferConfigTask)
             eradicateTask.finalizedBy(deleteInferConfigTask)
@@ -113,5 +117,10 @@ class InferAndroidPlugin implements Plugin<Project> {
                 variant.javaCompiler.targetCompatibility
             }
         }
+
+    }
+
+    private makeTaskRunWithCheck(Project project, Task task) {
+        project.getTasksByName(Constants.TASK_CHECK, false).each { it.dependsOn task }
     }
 }

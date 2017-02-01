@@ -5,6 +5,8 @@ import com.uber.infer.task.*
 import com.uber.infer.util.ConfigurationUtils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+
 /**
  * Infer plug-in for standard Java projects.
  */
@@ -66,7 +68,15 @@ class InferJavaPlugin implements Plugin<Project> {
         project.extensions.create(Constants.EXTENSION_INFER_PLUGIN_NAME, InferPluginExtension, project)
 
         def deleteInferConfigTask = project.tasks.create("deleteInferConfig", DeleteInferConfig)
+
+        makeTaskRunWithCheck(project, inferTask)
+        makeTaskRunWithCheck(project, eradicateTask)
+
         inferTask.finalizedBy(deleteInferConfigTask)
         eradicateTask.finalizedBy(deleteInferConfigTask)
+    }
+
+    private makeTaskRunWithCheck(Project project, Task task) {
+        project.getTasksByName(Constants.TASK_CHECK, false).each { it.dependsOn task }
     }
 }
