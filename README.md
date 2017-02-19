@@ -1,5 +1,7 @@
 # Infer Gradle Plugin
 
+[![Build Status](https://travis-ci.org/uber-common/infer-plugin.svg?branch=master)](https://travis-ci.org/uber-common/infer-plugin)
+
 This Gradle plug-in creates tasks to run [Infer](http://fbinfer.com) on Android and Java projects.
 
 ## Integration

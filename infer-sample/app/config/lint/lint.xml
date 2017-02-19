@@ -6,5 +6,5 @@
     <issue id="InvalidPackage">
         <ignore path="*okio*.jar"/>
     </issue>
-</lint>
 
+</lint>
