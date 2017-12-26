@@ -4,6 +4,10 @@
 
 This Gradle plug-in creates tasks to run [Infer](http://fbinfer.com) on Android and Java projects.
 
+## DEPRECATED
+
+This plug-in isn't used or maintained anymore. We strongly recomend migrating [NullAway](http://github.com/uber/nullaay) which is much more reliabile, significantly faster, and actively maintained.
+
 ## Integration
 
 To use this plug-in, [you must have Infer installed](http://fbinfer.com/docs/getting-started.html).
