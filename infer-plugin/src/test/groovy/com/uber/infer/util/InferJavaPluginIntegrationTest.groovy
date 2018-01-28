@@ -83,7 +83,7 @@ class InferJavaPluginIntegrationTest extends IntegrationTest {
     void eradicate_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
         javaTestBuildFile += """
             inferPlugin {
-                eradicate {
+                infer {
                     exclude = project.files("src")
                 }
             }

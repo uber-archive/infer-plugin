@@ -36,7 +36,7 @@ class IntegrationTest {
             result = runner.buildAndFail()
             assert result.task(":${command}").outcome == TaskOutcome.FAILED
         }
-        assert !(new File(runner.projectDir.absolutePath + "/.inferConfig").exists())
+        assert !(new File(runner.projectDir.absolutePath + "/.inferconfig").exists())
         assert !(new File(runner.projectDir.absolutePath + "/.inferSourceFiles").exists())
     }
 
