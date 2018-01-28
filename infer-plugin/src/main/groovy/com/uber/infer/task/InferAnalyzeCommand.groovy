@@ -13,8 +13,8 @@ public abstract class InferAnalyzeCommand extends DefaultTask {
     def analyze() {
         def outputDir = new File(project.getBuildDir(), "infer-out")
 
-        def result = RunCommandUtils.run("infer -a ${getAnalyzerName()} --fail-on-bug --out "
-                + " ${outputDir.absolutePath} -- analyze", project.getProjectDir())
+        def result = RunCommandUtils.run("infer ${getAnalyzerParameter()} -o "
+                + " ${outputDir.absolutePath}", project.getProjectDir())
 
         println result.stdout
 
@@ -26,5 +26,5 @@ public abstract class InferAnalyzeCommand extends DefaultTask {
     /**
      * @return the analyzer the task should run.
      */
-    protected abstract String getAnalyzerName();
+    protected abstract String getAnalyzerParameter();
 }

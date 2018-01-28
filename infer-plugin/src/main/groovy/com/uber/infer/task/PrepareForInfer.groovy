@@ -18,8 +18,6 @@ import java.nio.file.Paths
 public class PrepareForInfer extends DefaultTask {
 
     // For creating a config...
-    @Input Closure<FileCollection> eradicateExclude
-    @Input Closure<FileCollection> eradicateInclude
     @Input Closure<FileCollection> inferExclude
     @Input Closure<FileCollection> inferInclude
 
@@ -48,7 +46,7 @@ public class PrepareForInfer extends DefaultTask {
         def outputDir = new File(project.getBuildDir(), "infer-out")
         outputDir.mkdirs()
 
-        def result = RunCommandUtils.run("infer -a capture --out ${outputDir.absolutePath}"
+        def result = RunCommandUtils.run("infer capture -o ${outputDir.absolutePath}"
                 + " -- javac -source ${sourceJavaVersion()} -target ${targetJavaVersion()} " +
                 "-d ${classOutputDirectory.absolutePath} "
                 + "-s ${generatedSourceOutputDirectory.absolutePath} ${getJavacArguments()}", project.projectDir)
@@ -59,17 +57,14 @@ public class PrepareForInfer extends DefaultTask {
     }
 
     private def createInferConfig() {
-        def eradicateExcludeWithGenerated = eradicateExclude().plus(generatedSourceOutputDirectory)
         def inferExcludeWithGenerated = inferExclude().plus(generatedSourceOutputDirectory)
 
         Map<String, Object> config = new HashMap<String, Object>()
-        config.put("eradicate_blacklist", getPathsArrayInInferFormat(eradicateExcludeWithGenerated))
-        config.put("eradicate_whitelist", getPathsArrayInInferFormat(eradicateInclude().files))
-        config.put("infer_blacklist", getPathsArrayInInferFormat(inferExcludeWithGenerated))
-        config.put("infer_whitelist", getPathsArrayInInferFormat(inferInclude().files))
+        config.put("checkers-blacklist-path-regex", getPathsArrayInInferFormat(inferExcludeWithGenerated))
+        config.put("checkers-whitelist-path-regex", getPathsArrayInInferFormat(inferInclude().files))
 
-        project.file('.inferConfig').text = new JsonBuilder(config).toPrettyString() + "\n"
-        project.file('.inferConfig').deleteOnExit()
+        project.file('.inferconfig').text = new JsonBuilder(config).toPrettyString() + "\n"
+        project.file('.inferconfig').deleteOnExit()
     }
 
     private List<String> getPathsArrayInInferFormat(Collection<File> files) {

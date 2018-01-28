@@ -7,6 +7,6 @@ public class DeleteInferConfig extends DefaultTask {
 
     @TaskAction
     def deleteInferConfig() {
-        new File(project.projectDir.absolutePath + "/.inferConfig").delete()
+        new File(project.projectDir.absolutePath + "/.inferconfig").delete()
     }
 }

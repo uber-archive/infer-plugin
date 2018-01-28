@@ -37,12 +37,6 @@ class InferJavaPlugin implements Plugin<Project> {
             targetJavaVersion = {
                 project.targetCompatibility
             }
-            eradicateExclude = {
-                project.eradicate.exclude
-            }
-            eradicateInclude = {
-                project.eradicate.include
-            }
             inferExclude = {
                 project.infer.exclude
             }
