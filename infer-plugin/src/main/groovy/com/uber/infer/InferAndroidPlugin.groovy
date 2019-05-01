@@ -70,12 +70,6 @@ class InferAndroidPlugin implements Plugin<Project> {
 
     private createPrepareForInferTask(Project project, String taskVariantName, BaseVariant variant) {
         return project.tasks.create(Constants.TASK_PREPARE_FOR_INFER + taskVariantName, PrepareForInfer) {
-            eradicateExclude = {
-                project.eradicate.exclude
-            }
-            eradicateInclude = {
-                project.eradicate.include
-            }
             inferExclude = {
                 project.infer.exclude
             }

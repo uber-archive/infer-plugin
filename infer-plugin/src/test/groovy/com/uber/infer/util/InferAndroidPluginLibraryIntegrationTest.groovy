@@ -78,7 +78,7 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
     void eradicateDebug_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
         androidTestBuildFile += """
             inferPlugin {
-                eradicate {
+                infer {
                     exclude = project.files("src")
                 }
             }
@@ -95,7 +95,7 @@ class InferAndroidPluginLibraryIntegrationTest extends IntegrationTest {
     void eradicateRelease_withBadSourceAndSourceExcluded_shouldPassWhenInferFindsNoWarnings() {
         androidTestBuildFile += """
             inferPlugin {
-                eradicate {
+                infer {
                     exclude = project.files("src")
                 }
             }

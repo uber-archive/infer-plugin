@@ -13,7 +13,7 @@ public class CheckForInfer extends DefaultTask {
     @TaskAction
     def checkForInfer() {
         try {
-            RunCommandUtils.run("infer -v")
+            RunCommandUtils.run("infer --version")
         } catch (IOException e) {
             throw new GradleException(
                 "Infer is not installed on this machine.\n" +
